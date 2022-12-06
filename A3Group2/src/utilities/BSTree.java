@@ -1,101 +1,183 @@
-
 package utilities;
 
-import exceptions.TreeException;
-import referenceBasedTreeImplementation.BSTreeNode;
 
-public class BSTree<E> implements BSTreeADT{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private BSTreeNode<E> root;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
-	//constructor
-	public BSTree() {
-		this.root = null;
-	}
-	
-	public BSTree(E element) {
-		this.root = new BSTreeNode<E>(element, root, root);
-	}
-	@Override
-	public BSTreeNode getRoot() throws TreeException {
-		// TODO Auto-generated method stub
-		return root;
-	}
-
+public class BSTree<E> implements BSTreeADT, Iterator {
+    private BSTreeNode root;
+    
+    //constructors
+    
+    public BSTree()
+    {
+    	this.root = null;
+    }
+    
+    public BSTree(E element)
+    {
+    	this.root = new BSTreeNode (element);
+    	
+    
+    }
+    
 	@Override
 	public int getHeight() {
-		// TODO Auto-generated method stub
 		return 0;
+	
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return size(root);
 	}
-
+	 int size(BSTreeNode node)
+	    {
+	        if (node == null)
+	            return 0;
+	        else
+	            return (size(node.left) + 1 + size(node.right));
+	    }
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+		
 		return root == null;
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
 		
+		root = null;
 	}
 
 	@Override
 	public boolean contains(Comparable entry) throws TreeException {
-		// TODO Auto-generated method stub
+	
 		return false;
 	}
 
 	@Override
-	public BSTreeNode search(Comparable entry) throws TreeException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public BSTreeNode<E> insert(BSTreeNode<E> root, E data) {
-		//check if theres already existing node
-		if(root == null) {
-			root = new BSTreeNode<E>(data);
-			return root;
-		}
-//		else if(root.getElement()  data) {
-//			
-//		}
-	}
-	@Override
 	public boolean add(Comparable newEntry) throws NullPointerException {
-		// TODO Auto-generated method stub
-		return false;
+		int compare = 0;
+		BSTreeNode node= new BSTreeNode(newEntry);
+        if(root==null) {
+            root = node;
+            return  true;
+        }
+        BSTreeNode prev=null;
+        BSTreeNode temp=root;
+        while (temp!=null){
+            if(   newEntry.compareTo(temp.element) < 0 ){
+                prev=temp;
+                temp=temp.left;
+            }
+            else if (newEntry.compareTo(temp.element) >0 ){
+                prev=temp;
+                temp=temp.right;
+            }
+        }
+        if(newEntry.compareTo(prev.element) < 0)
+            prev.left=node;
+        else prev.right=node;
+		return true;
 	}
 
 	@Override
 	public Iterator inorderIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		BSTreeNode temp=root;
+        Stack<BSTreeNode> stack=new Stack<>();
+    	
+        while (temp!=null||!stack.isEmpty()){
+            if(temp!=null){
+            stack.add(temp);
+                temp=temp.left;
+            }
+            else {
+                temp=stack.pop();
+              System.out.print(temp.element+" ");
+                temp=temp.right;
+	
+            }
+            
 	}
+    
+		return  (Iterator<BSTreeNode>) stack;
+	}
+	 public void inorder(){
+			BSTreeNode temp=root;
+	        Stack<BSTreeNode> stack=new Stack<>();
+	        while (temp!=null||!stack.isEmpty()){
+	            if(temp!=null){
+	            stack.add(temp);
+	                temp=temp.left;
+	            }
+	            else {
+	                temp=stack.pop();
+	                System.out.print(temp.element+" ");
+	                temp=temp.right;
+	            }
+	            }
+	 }
 
 	@Override
 	public Iterator preorderIterator() {
-		// TODO Auto-generated method stub
+		   preOrder(root);
 		return null;
+	}
+	
+	public void preOrder(BSTreeNode node)
+	{
+		
+		if ( node == null)
+		{
+			return;
+		}
+		preOrder(node.left);
+		System.out.print(node.element);
+		preOrder(node.right);
 	}
 
 	@Override
 	public Iterator postorderIterator() {
-		// TODO Auto-generated method stub
+		postOrder(root);
 		return null;
-	} 
+	}
 	
+	public void postOrder(BSTreeNode node)
+	{
+		if ( node == null)
+		{
+			return;
+		}
+		preOrder(node.left);
+		preOrder(node.right);
+		System.out.print(node.element);
+	}
 
+	@Override
+	public boolean hasNext() {
 	
+		return false;
+	}
+
+	@Override
+	public Object next() throws NoSuchElementException {
 	
+		return null;
+	}
+
+	@Override
+	public BSTreeNode getRoot() throws TreeException {
+	
+		return null;
+	}
+
+	@Override
+	public BSTreeNode search(Comparable entry) throws TreeException {
+	
+		return null;
+	}
+
 }
